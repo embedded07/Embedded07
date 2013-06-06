@@ -1,0 +1,59 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BringUp_Base	swis.h	104;"	d
+BringUp_FatalError	swis.h	106;"	d
+BringUp_Trace	swis.h	105;"	d
+Event_IODeviceClose	swis.h	92;"	d
+Event_IODeviceInit	swis.h	90;"	d
+Event_IODeviceOpen	swis.h	91;"	d
+Event_IODeviceReadBit	swis.h	96;"	d
+Event_IODeviceReadBlock	swis.h	98;"	d
+Event_IODeviceReadByte	swis.h	94;"	d
+Event_IODeviceWriteBit	swis.h	95;"	d
+Event_IODeviceWriteBlock	swis.h	97;"	d
+Event_IODeviceWriteByte	swis.h	93;"	d
+INTPND	irq_handler.s	/^INTPND:$/;"	l
+IRQoFF	swi_handler.c	92;"	d	file:
+IRQoFF	swi_handler_test.c	92;"	d	file:
+IRQoN	swi_handler.c	91;"	d	file:
+IRQoN	swi_handler_test.c	91;"	d	file:
+LEDBANK	tick_service.c	160;"	d	file:
+LED_4_OFF	tick_service.c	164;"	d	file:
+LED_4_ON	tick_service.c	163;"	d	file:
+SLOS	swis.h	84;"	d
+SVC	swi_handler.c	86;"	d	file:
+SVC	swi_handler_test.c	86;"	d	file:
+SYSTEM	swi_handler.c	85;"	d	file:
+SYSTEM	swi_handler_test.c	85;"	d	file:
+SwiRegs	swis.h	/^typedef struct SwiRegs $/;"	s
+SwiRegs	swis.h	/^} SwiRegs;$/;"	t	typeref:struct:SwiRegs
+TEST1	swi_handler_test.c	119;"	d	file:
+USER	swi_handler.c	87;"	d	file:
+USER	swi_handler_test.c	87;"	d	file:
+countdown	tick_service.c	/^UINT countdown;$/;"	v
+cpsr	swis.h	/^unsigned int cpsr;      \/* spsr on entry to SWI *\/$/;"	m	struct:SwiRegs
+eventButtonInit	button_service.c	/^void eventButtonInit(void)$/;"	f
+eventButtonMaskIrq	button_service.c	/^void eventButtonMaskIrq(unsigned irq) $/;"	f
+eventButtonPressed	button_service.c	/^void eventButtonPressed(void)$/;"	f
+eventButtonService	button_service.c	/^void eventButtonService(void) $/;"	f
+eventButtonUnmaskIrq	button_service.c	/^void eventButtonUnmaskIrq(unsigned irq1,unsigned irq2) $/;"	f
+eventButtonVeneer	irq_handler.s	/^eventButtonVeneer:$/;"	l
+eventServicesInit	event_init.c	/^void eventServicesInit(void)$/;"	f
+eventTickInit	tick_service.c	/^void eventTickInit (UINT msec)$/;"	f
+eventTickService	tick_service.c	/^void eventTickService(void) $/;"	f
+eventTickStart	tick_service.c	/^void eventTickStart(void)$/;"	f
+eventTickVeneer	irq_handler.s	/^eventTickVeneer:$/;"	l
+eventsIRQHandler	irq_handler.s	/^eventsIRQHandler:$/;"	l
+eventsSWIHandler	swi_handler.c	/^CallBack eventsSWIHandler(int swi_number, SwiRegs *r) $/;"	f
+eventsSWIHandler	swi_handler.s	/^eventsSWIHandler:$/;"	l
+eventsSWIHandler	swi_handler_test.c	/^CallBack eventsSWIHandler(int swi_number, SwiRegs *r) $/;"	f
+ledNode	button_service.c	/^device_treestr *ledNode;$/;"	v
+ledUID	button_service.c	/^UID ledUID;$/;"	v
+pc	swis.h	/^unsigned int pc;        \/* lr on entry to SWI *\/$/;"	m	struct:SwiRegs
+r	swis.h	/^unsigned int r[13];     \/* R0 - R12 *\/$/;"	m	struct:SwiRegs
+tIOPDATA	tick_service.c	159;"	d	file:
+xLED	tick_service.c	/^unsigned int xLED = 0;$/;"	v
