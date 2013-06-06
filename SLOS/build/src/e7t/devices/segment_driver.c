@@ -73,7 +73,7 @@
 #include "../../devices/ddf_frame.h"
 #include "segment_driver.h"
 
-#define DEVICE_SEGMENT_E7T  55090
+#define DEVICE_SEGMENT_E7T  55095
 
 /*****************************************************************************
  * MACROS
@@ -81,20 +81,21 @@
 
 /* Samsung KS32C50100 settings .... */
 
-#define SYSCFG		0x03ff0000
-#define IOPMOD          ((volatile unsigned *)(SYSCFG+0x5000))
-#define IOPDATA         ((volatile unsigned *)(SYSCFG+0x5008))
-#define	SEG_MASK	(0x1fc00)
+#define SYSCFG		0x48000000
+#define IOPMOD          ((volatile unsigned *)(SYSCFG+0x10))
+#define LOW_IOPDATA     ((volatile unsigned *)(0x10300000))
+#define HIGH_IOPDATA	((volatile unsigned *)(0x10400000))
+#define	SEG_MASK	(0x00)
 
 /* define segments in terms of IO lines */
 
-#define	SEG_A		(1<<10)
-#define	SEG_B		(1<<11)
-#define	SEG_C		(1<<12)
-#define	SEG_D		(1<<13)
-#define	SEG_E		(1<<14)
-#define	SEG_F		(1<<16)
-#define	SEG_G		(1<<15)
+#define	SEG_A		(1<<0)
+#define	SEG_B		(1<<1)
+#define	SEG_C		(1<<2)
+#define	SEG_D		(1<<3)
+#define	SEG_E		(1<<4)
+#define	SEG_F		(1<<5)
+#define	SEG_G		(1<<6)
 
 #define	DISP_0		(SEG_A|SEG_B|SEG_C|SEG_D|SEG_E|SEG_F)
 #define	DISP_1		(SEG_B|SEG_C)
@@ -173,8 +174,8 @@ void segment_init (void)
 /* initalize physical device ... */
 
 *IOPMOD 	|= SEG_MASK;
-*IOPDATA 	|= SEG_MASK;
-
+*LOW_IOPDATA 	|= SEG_MASK;
+*HIGH_IOPDATA	|= SEG_MASK;
 /* setup internal structure ... */
 
 display.uid	= NONE;
@@ -250,8 +251,11 @@ int segment_close(UID id)
 
 void segment_setdisplay(unsigned d)
 {
-*IOPDATA 	&= ~SEG_MASK;
-*IOPDATA 	|= d;	
+*LOW_IOPDATA 	&= ~SEG_MASK;
+*LOW_IOPDATA 	|= d;	
+
+*HIGH_IOPDATA	&= ~SEG_MASK;
+*HIGH_IOPDATA	|= d;
 }
 
 /* -- segment_set -------------------------------------------------------------

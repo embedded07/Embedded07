@@ -13,6 +13,13 @@
 @ * - separated the pcbSetUp routine
 @ *
 @ ****************************************************************************
+SVCaddr: 	.word 0xa0080000
+IRQaddr:	.word 0xa0040000
+USRaddr:	.word 0xa0009000
+
+TASK1addr:	.word 0x00000000
+TASK2addr:	.word 0xa0010000
+TASK3addr:	.word 0xa0020000
 
      .text
      .code 32
@@ -43,11 +50,11 @@ coreInitialize:
 @ ------------------------------------------------
 */
 
-     MOV sp,#0x80000 
+     LDR sp,SVCaddr
      MSR CPSR_c,#NoInt|SYS32md
-     MOV sp,#0x40000           
+     LDR sp,IRQaddr       
      MSR CPSR_c,#NoInt|IRQ32md
-     MOV sp,#0x10000            
+     LDR sp,USRaddr          
      MSR CPSR_c,#NoInt|SVC32md
 
 /*
@@ -58,12 +65,12 @@ coreInitialize:
 */
      LDR     r0,=C_EntryTask2    
      LDR     r1,=PCB_PtrTask2
-     MOV     r2,#0x20000
+     LDR     r2,TASK2addr
      BL      pcbSetUp
 
      LDR     r0,=C_EntryTask3     
      LDR     r1,=PCB_PtrTask3
-     MOV     r2,#0x30000
+     LDR     r2,TASK3addr
      BL      pcbSetUp
 
 @ -- set the current ID to TASK1 ...........

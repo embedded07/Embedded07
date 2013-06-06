@@ -77,7 +77,23 @@
  * MACRO'S
  *****************************************************************************/
 
-/* none ... */
+#define	__REG32	*(volatile unsigned long *)
+
+//Interrupt Control Registers
+#define	INTERRUPT_CONTROL_BASE 0x40D00000
+
+#define	ICIP		0x00
+#define	ICMR		0x04
+#define	ICLR		0x08
+#define	ICCR		0x14
+
+//OS Timer Registers
+#define TIMER_BASE	0x40A00000
+
+#define OSMR0		0x00
+#define OSCR		0x10
+#define OIER		0x1C
+#define OSSR		0x14
  
 /*****************************************************************************
  * GLOBAL
@@ -119,9 +135,12 @@ void eventTickInit (UINT msec)
  *
  * ----------------------------------------------------------------------
  */
+	__REG32(INTERRUPT_CONTROL_BASE + ICCR) =  0x00000001; // Disable Idle Mask = DIM = idel mode on : bit 0 -> 1
+	__REG32(INTERRUPT_CONTROL_BASE + ICMR) |= 0x04000000; // TIMTER 0 MASK : bit 26 -> 1
+	__REG32(INTERRUPT_CONTROL_BASE + ICLR) &= 0x00000000; // IRQ mode : IL26 = 0
 
-*TMOD = 0;
-*INTPND = 0x00000000; 	// Clear pending interrupts .............
+	__REG32(TIMER_BASE + OSCR) =  0x00000000; // Count Clear
+	__REG32(TIMER_BASE + OSSR) =  0x00000001; // Timer Status Clear
 
 /* ----------------------------------------------------------------------
  *
@@ -133,10 +152,10 @@ void eventTickInit (UINT msec)
   switch (msec)
   {
   case 2: /* fast ... */
-  countdown = 0x000ffff0;
+	__REG32(TIMER_BASE + OSMR0) = 368640; // 0.1sec -> 368640
   break;
   default: /* slow ... */
-  countdown = 0x00effff0;
+	__REG32(TIMER_BASE + OSMR0) = 3686400; // 1sec -> 3686400
   break;	
   }
 }
@@ -170,24 +189,18 @@ void eventTickService(void)
 { 
 
 /* -- reset timer interrupt... */ 
+	disable_irq(); // Disable IRQ	
 
-*INTPND	= 1<<10;
-*TDATA0	= countdown; 
-
-  if (xLED==0)
-  { 
-  LED_4_ON; 
-  xLED=1; 
-  } 
-  else 
-  {
-  LED_4_OFF; 
-  xLED=0;
-  } 
-
+	if((__REG32(INTERRUPT_CONTROL_BASE + ICIP) & 0x04000000) != 0x00000000){ // pin 26 : OS Timer 0 // if IRQ set, bit 26 set 1. So if it's value same with 0x00000000, not set IRQ
+		__REG32(TIMER_BASE + OSCR) =  0x00000000; // OSCR = 0
+		__REG32(TIMER_BASE + OSSR) &= 0x00000000; // OSSR : 0 -> 1 
+		__REG32(TIMER_BASE + OSSR) |= 0x00000001; // if OSMR and OSCR have same value, OSSR set bit 0 : 1
+	}
 /* -- unmask the interrupt source.... */
+
+	enable_irq(); // IRQ Enable
 	
-*(volatile unsigned int*)INTMSK &= ~((1<<INT_GLOBAL)|(1<<10)|(1<<0));
+//*(volatile unsigned int*)INTMSK &= ~((1<<INT_GLOBAL)|(1<<10)|(1<<0));
 } 
 
 /* -- eventTickStart ----------------------------------------------------------
@@ -202,11 +215,27 @@ void eventTickService(void)
  
 void eventTickStart(void)
 {	
-*TDATA0   = countdown; /* load Counter Timer ... */
-*TMOD     |= 0x1;      /* enable interval interrupt ... */
+//*TDATA0   = countdown; /* load Counter Timer ... */
+//*TMOD     |= 0x1;      /* enable interval interrupt ... */
+	__REG32(TIMER_BASE + OSCR) =  0x00000000; // Count Clear
+	__REG32(TIMER_BASE + OIER) |= 0x00000001; // TIMER 0 : set bit 0 -> 1
+	__REG32(TIMER_BASE + OSSR) =  0x00000001; // Timer Status Clear
   
 /* -- unmask the interrupt source.. */ 
   	
-*(volatile unsigned int*)INTMSK &= ~((1 << INT_GLOBAL) | (1<<10) | (1<<0));     
+//*(volatile unsigned int*)INTMSK &= ~((1 << INT_GLOBAL) | (1<<10) | (1<<0));     
+}
+
+
+void enable_irq(void){
+	__asm__ __volatile__("mrs	r1, cpsr");			// transfer the contents of cpsr into a r1
+	__asm__ __volatile__("bic	r1, r1, #0x80");	// initialize r1 to 0x80 
+	__asm__ __volatile__("msr	cpsr, r1");			// transfer the contents of r1 the cpse
+}
+
+void disable_irq(void){
+	__asm__ __volatile__("mrs	r1, cpsr");			// transfer the contents of cpsr into a r1
+	__asm__ __volatile__("orr	r1, r1, #0x80"); 	// or r1 and 0x80
+	__asm__ __volatile__("msr	cpsr, r1");   		// transfer the contents of r1 the cpse
 }
 

@@ -41,7 +41,7 @@ ENTRY(_start)
 
 MEMORY
 {
-  SRAM   : o = 0, l = 0x80000
+  SRAM   : o = 0xa0000000, l = 0xa1ffffff
 }
 
 

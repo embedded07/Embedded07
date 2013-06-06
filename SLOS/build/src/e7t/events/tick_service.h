@@ -121,5 +121,7 @@ void eventTickService(void);
  */  
 
 void eventTickStart(void);
+void enable_irq(void);
+void enable_irq(void);
 
 

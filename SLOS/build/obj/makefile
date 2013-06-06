@@ -42,6 +42,8 @@ task3_start.o
 all : ${OBJS}
 	${LINKER} -o ../image/slos.elf linker.dat
 	${CONVERT} ../image/slos.bin -s ../image/slos.elf
+	arm-elf-objdump -D ../image/slos.elf > "dump.txt"
+	cp ../image/slos.bin /tftpboot/
 
 start.o : ../src/start.s
 	${ASSEMBLER} ${ASFLAGS} -o $@ $<
@@ -141,3 +143,12 @@ task2_start.o : ../src/apps/task2_start.c
  
 task3_start.o : ../src/apps/task3_start.c
 	${CC} ${CFLAGS} -o $@ $<
+
+
+clean :
+	rm -f *.o
+#	rm -f ../image/slos.elf linker.dat
+	rm -f ../image/slos.elf
+	rm -f /tftp/slos.bin
+	rm -f ..image/dump.txt
+	rm -f dump.txt

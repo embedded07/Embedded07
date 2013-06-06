@@ -82,28 +82,36 @@
 /* -- base register */
 
 #ifndef SYSCFG
-#define SYSCFG 0x03ff0000
+#define SYSCFG 0x48000000
 #endif
 
 /* -- GPIO */
 
-#define IOPMOD      (volatile unsigned int *)(SYSCFG + 0x5000)
-#define IOPDATA     (volatile unsigned int *)(SYSCFG + 0x5008)
+#define IOPMOD      (volatile unsigned int *)(SYSCFG + 0x10)
+#define IOPDATA     (volatile unsigned int *)(SYSCFG + 0x08000008)
 #define LEDBANK     *IOPDATA		
 
 /* -- set */
 
+#define LED_7_ON    (LEDBANK=LEDBANK|0x00000080)
+#define LED_6_ON    (LEDBANK=LEDBANK|0x00000040)
+#define LED_5_ON    (LEDBANK=LEDBANK|0x00000020)
 #define LED_4_ON    (LEDBANK=LEDBANK|0x00000010)
-#define LED_3_ON    (LEDBANK=LEDBANK|0x00000020)
-#define LED_2_ON    (LEDBANK=LEDBANK|0x00000040)
-#define LED_1_ON    (LEDBANK=LEDBANK|0x00000080)
+#define LED_3_ON    (LEDBANK=LEDBANK|0x00000008)
+#define LED_2_ON    (LEDBANK=LEDBANK|0x00000004)
+#define LED_1_ON    (LEDBANK=LEDBANK|0x00000002)
+#define LED_0_ON    (LEDBANK=LEDBANK|0x00000001)
 
 /* -- reset */
 
+#define LED_7_OFF   (LEDBANK=LEDBANK&~0x00000080)
+#define LED_6_OFF   (LEDBANK=LEDBANK&~0x00000040)
+#define LED_5_OFF   (LEDBANK=LEDBANK&~0x00000020)
 #define LED_4_OFF   (LEDBANK=LEDBANK&~0x00000010)
-#define LED_3_OFF   (LEDBANK=LEDBANK&~0x00000020)
-#define LED_2_OFF   (LEDBANK=LEDBANK&~0x00000040)
-#define LED_1_OFF   (LEDBANK=LEDBANK&~0x00000080)
+#define LED_3_OFF   (LEDBANK=LEDBANK&~0x00000008)
+#define LED_2_OFF   (LEDBANK=LEDBANK&~0x00000004)
+#define LED_1_OFF   (LEDBANK=LEDBANK&~0x00000002)
+#define LED_0_OFF   (LEDBANK=LEDBANK&~0x00000001)
 
 /*****************************************************************************
  * DATATYPES
@@ -111,8 +119,8 @@
 
 typedef struct 
 {
-unsigned char led[4]; 
-unsigned char uid[4];
+unsigned char led[8]; 
+unsigned char uid[8];
 } internal_ledstr;
 
 /*****************************************************************************
@@ -135,27 +143,33 @@ internal_ledstr		diodes;
 
 void led_init(void) 
 {
-*IOPMOD  = 0xf0;
-*IOPDATA = 0x50;
+*IOPMOD  = 0x00005AA8;
+*IOPDATA = 0x00;
 
 /* switch off all the LED's ....................... */
-
+LED_7_OFF;
+LED_6_OFF;
+LED_5_OFF;
 LED_4_OFF;
 LED_3_OFF;
 LED_2_OFF;
 LED_1_OFF;
+LED_0_OFF;
 
 /* initialize internal data structure ............. */
 
-diodes.led [GREEN1] = OFF;
-diodes.led [RED]    = OFF;
-diodes.led [ORANGE] = OFF;
-diodes.led [GREEN2] = OFF;
+//diodes.led = OFF; // need to TEST!!
+//diodes.uid = NONE; // need to TEST!!
 
-diodes.uid [GREEN1] = NONE;
-diodes.uid [RED]    = NONE;
-diodes.uid [ORANGE] = NONE;
-diodes.uid [GREEN2] = NONE;
+//diodes.led [GREEN1] = OFF;
+//diodes.led [RED]    = OFF;
+//diodes.led [ORANGE] = OFF;
+//diodes.led [GREEN2] = OFF;
+
+//diodes.uid [GREEN1] = NONE;
+//diodes.uid [RED]    = NONE;
+//diodes.uid [ORANGE] = NONE;
+//diodes.uid [GREEN2] = NONE;
 
 }
 
@@ -256,20 +270,20 @@ int x;
         {
           switch (x) 
           {
-          case GREEN2 : LED_4_ON; break;
-          case RED    : LED_2_ON; break;
-          case ORANGE : LED_3_ON; break;
-          case GREEN1 : LED_1_ON; break;
+         // case GREEN2 : LED_4_ON; break;
+         // case RED    : LED_2_ON; break;
+         // case ORANGE : LED_3_ON; break;
+         // case GREEN1 : LED_1_ON; break;
           }
         }
         else 
         {
           switch (x) 
           {
-          case GREEN2 : LED_4_OFF; break;
-          case RED    : LED_2_OFF; break;
-          case ORANGE : LED_3_OFF; break;
-          case GREEN1 : LED_1_OFF; break;
+          //case GREEN2 : LED_4_OFF; break;
+          //case RED    : LED_2_OFF; break;
+          //case ORANGE : LED_3_OFF; break;
+          //case GREEN1 : LED_1_OFF; break;
           }
         }
       }

@@ -211,10 +211,11 @@ volatile int delay;
   /* 
    * error loop
    */
-
+/*
   while (1) 
   {
   delay=0xBEEF0001;
   };
+*/
 }
 

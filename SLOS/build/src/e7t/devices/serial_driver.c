@@ -73,61 +73,53 @@
 #include "../../devices/ddf_frame.h"
 #include "serial_driver.h"
 
-#define DEVICE_SERIAL_E7T  55095
+#define DEVICE_SERIAL_E7T  55090
+
+typedef	unsigned long		u32;
 
 /*****************************************************************************
  * MACROS
  *****************************************************************************/
+#define	__REG	*(volatile unsigned long *)
+#define	__REG8	*(volatile unsigned char *)
+#define	__REG32	*(volatile unsigned long *)
 
-#define ON		1
-#define OFF		0
-
-#define SYSCFG		(0x03ff0000)
-#define UART0_BASE	(SYSCFG + 0xD000)
-#define UART1_BASE 	(SYSCFG + 0xE000)
+#define	TICKS_PER_SECOND 32768
+#define	RCNR	 __REG(0x40900000)
 
 /*
  * Serial settings.......................
  */
-	
-#define	ULCON	0x00
-#define	UCON	     0x04
-#define	USTAT	0x08
-#define	UTXBUF	0x0C
-#define	URXBUF	0x10
-#define	UBRDIV	0x14
+
+// Closk registers
+#define	CLOCK_MANAGER_BASE 0x41300000
+#define	CKEN		0x04
+
+//GPIO registers
+#define	GPIO_BASE	0x40E00000
+#define	GPDR1		0x10
+#define	GAFR1_L	0x5C
 
 /*
  * Line control register bits............
  */
- 
-#define	ULCR8bits		(3)
-#define	ULCRS1StopBit	(0)
-#define	ULCRNoParity	(0)
 
 /*
  * UART Control Register bits............
  */
- 
-#define 	UCRRxM	(1)
-#define 	UCRRxSI	(1 << 2)
-#define 	UCRTxM	(1 << 3)
-#define 	UCRLPB	(1 << 7)
 
-/*
- * UART Status Register bits
- */
- 
-#define USROverrun     	(1 << 0)
-#define USRParity      	(1 << 1)
-#define USRFraming     	(1 << 2)
-#define USRBreak       	(1 << 3)
-#define USRDTR           (1 << 4)
-#define USRRxData      	(1 << 5) 
-#define USRTxHoldEmpty 	(1 << 6)
-#define USRTxEmpty     	(1 << 7)
+#define	FFUART_BASE       0x40100000
+#define	FFRBR		0x00
+#define	FFTHR		0x00
+#define	FFIER		0x04
+#define	FFFCR		0x08
+#define	FFLCR		0x0C
+#define	FFLSR		0x14
+#define	FFDLL		0x00
+#define	FFDLH		0x04
 
- /* default baud rate value */
+
+/* default baud rate value */
  
 #define BAUD_9600	   (162 << 4)
 
@@ -135,12 +127,6 @@
 
 /* UART primitives */
 
-#define GET_STATUS(p)	(*(volatile unsigned  *)((p) + USTAT))
-#define RX_DATA(s)     	((s) & USRRxData)
-#define GET_CHAR(p)		(*(volatile unsigned  *)((p) + URXBUF))
-#define TX_READY(s)    	((s) & USRTxHoldEmpty)
-#define PUT_CHAR(p,c)  	(*(unsigned  *)((p) + UTXBUF) = (unsigned )(c))
-		
 #define COM1	(1)
 #define COM0	(0)
 
@@ -171,20 +157,7 @@ internal_serialstr		node;
  * 
  */
 
-void internalSerialE7TSetup(unsigned int port, unsigned int baud)
-{
-/* Disable interrupts  */
-*(volatile unsigned *) (port + UCON) = 0;
-
-/* Set port for 8 bit, one stop, no parity  */
-*(volatile unsigned *) (port + ULCON) = (ULCR8bits);
-
-/* Enable interrupt operation on UART */
-*(volatile unsigned *) (port + UCON) = UCRRxM | UCRTxM;
-
-/* Set baud rate  */
-*(volatile unsigned *) (port + UBRDIV) = baud;
-}
+void internalSerialE7TSetup(unsigned int port, unsigned int baud){}
 
 /* -- serial_init -------------------------------------------------------------
  *
@@ -201,18 +174,44 @@ void serial_init(void)
 {
 /* initalize physical device ... */
 
-/* initialize COM0 ......................... */
-internalSerialE7TSetup(UART0_BASE,BAUD_9600);
+/* initialize ......................... */
 
-/* initialize COM1 ......................... */
-internalSerialE7TSetup(UART1_BASE,BAUD_9600);
+	/*         GPIO SETTING            */
+	/*
+	Set GPIO's Pin Direction and Alternate Function Register
+	GPIO 34, GPIO39 
+	GPDR1 = 0 : input, 1 : output
+	GAFR1_L = AF34 : set 01 to FFUART receive, AF39 : set 10 to FFUART transmit data
+	*/
+	__REG32(GPIO_BASE + GPDR1) = 0x00000080; // set PD39 to 1 for Pin configured as on output 
+	__REG32(GPIO_BASE + GAFR1_L) = 0x00008010; // set AF34, AF39 for general purpose I/O, alternate function
+	__REG32(CLOCK_MANAGER_BASE + CKEN) = 0x0040 ; // Clock enable register. set 6 bit for 1 to clock unit enable
 
+	/*	          DLAB = 0           */
+	/*
+	Stop bit : 1 bit
+	Parity bit : None
+	Data bit : 1 bit.  WLS0, WLS1 set 1.
+	*/
+	__REG(FFUART_BASE + FFLCR) = 0x07; // Line control Register //  0000 0111
+	__REG(FFUART_BASE + FFIER) = 0x40; // Interrupt Enable Register // 0100 0000 
+	// not interrupt, so set polling. UART unit enable.  
+	__REG(FFUART_BASE + FFFCR) = 0x07; // FIFO control Register // 0000 0111
+	// Transmit and Receive FIFO enable, Reset Transmitter and Receiver FIFO set 1. 
+	
+	/*            DLAB = 1          */
+
+	__REG(FFUART_BASE + FFLCR) = 0x87; // 1000 0111 
+	__REG(FFUART_BASE + FFDLL) = 0x60; //SERIAL_SPEED_RATE; //baud rate = 9600 = 0x00000060
+	__REG(FFUART_BASE + FFDLH) = 0x00; // Divisor Latch High Register. init to 0.
+
+	__REG(FFUART_BASE + FFLCR) = 0x07; // set DLAB = 0.
 /* setup internal structure ... */
 
-node.baudrate[0] = BAUD_9600;
-node.baudrate[1] = BAUD_9600;
-node.uid[COM0]   = NONE;
-node.uid[COM1]   = NONE;
+	node.baudrate[0] = BAUD_9600;
+	node.baudrate[1] = BAUD_9600;
+	node.uid[COM0]   = NONE;
+	node.uid[COM1]   = NONE;
 }
 
 /* -- serial_open -------------------------------------------------------------
@@ -293,9 +292,9 @@ return DEVICE_UNKNOWN;
 
 void internal_serial_write(unsigned int port,BYTE c)		
 {
-  while (TX_READY(GET_STATUS(port))==0){;}
-
-PUT_CHAR(port,c);
+	while((__REG(port + FFLSR) & 0x20) == 0x0); // Data not exist in FIFO. check 5 bit(TDRQ) for empty.
+	
+	__REG(port +FFTHR) = ((u32)c & 0xFF); // Store one character in THR 
 }
 
 /* -- serial_write_byte -------------------------------------------------------
@@ -315,13 +314,13 @@ void serial_write_byte(UID id,BYTE data)
 
   if (node.uid[COM0]==id) 
   {
-  internal_serial_write (UART0_BASE,data);
+  internal_serial_write (FFUART_BASE,data);
   return;
   }
 
   if (node.uid[COM1]==id) 
   {
-  internal_serial_write (UART1_BASE,data);
+  internal_serial_write (FFUART_BASE,data);
   return;
   }
 
@@ -340,9 +339,9 @@ void serial_write_byte(UID id,BYTE data)
 BYTE internal_serial_read(unsigned int port)
 {
 
-  while ( (RX_DATA(GET_STATUS(port)))==0 ) {;}
+	while ( (__REG32(port + FFLSR) & 0x01) == 0 ) {;}
 
-return GET_CHAR(port);
+	return __REG8(port + FFRBR);
 }	
 
 /* -- serial_read_byte --------------------------------------------------------
@@ -359,12 +358,12 @@ BYTE  serial_read_byte(UID id)
 {
   if (node.uid[COM0]==id) 
   {
-  return internal_serial_read (UART0_BASE);
+  return internal_serial_read (FFUART_BASE);
   }
  
   if (node.uid[COM1]==id) 
   {
-  return internal_serial_read (UART1_BASE);
+  return internal_serial_read (FFUART_BASE);
   }
 
 return 255;
