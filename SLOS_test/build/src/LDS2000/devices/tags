@@ -1,0 +1,131 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BAUD_9600	serial_driver.c	132;"	d	file:
+COM0	serial_driver.c	145;"	d	file:
+COM0	serial_driver.h	69;"	d
+COM1	serial_driver.c	144;"	d	file:
+COM1	serial_driver.h	68;"	d
+DEVICE_LED_E7T	ddf_types.h	72;"	d
+DEVICE_LED_E7T	led_driver.h	73;"	d
+DEVICE_SEGMENT_E7T	ddf_types.h	73;"	d
+DEVICE_SEGMENT_E7T	segment_driver.c	76;"	d	file:
+DEVICE_SERIAL_E7T	ddf_types.h	74;"	d
+DEVICE_SERIAL_E7T	serial_driver.c	76;"	d	file:
+DISP_0	segment_driver.c	99;"	d	file:
+DISP_1	segment_driver.c	100;"	d	file:
+DISP_2	segment_driver.c	101;"	d	file:
+DISP_3	segment_driver.c	102;"	d	file:
+DISP_4	segment_driver.c	103;"	d	file:
+DISP_5	segment_driver.c	104;"	d	file:
+DISP_6	segment_driver.c	105;"	d	file:
+DISP_7	segment_driver.c	106;"	d	file:
+DISP_8	segment_driver.c	107;"	d	file:
+DISP_9	segment_driver.c	108;"	d	file:
+DISP_A	segment_driver.c	110;"	d	file:
+DISP_B	segment_driver.c	111;"	d	file:
+DISP_C	segment_driver.c	112;"	d	file:
+DISP_D	segment_driver.c	113;"	d	file:
+DISP_E	segment_driver.c	114;"	d	file:
+DISP_F	segment_driver.c	115;"	d	file:
+GET_CHAR	serial_driver.c	140;"	d	file:
+GET_STATUS	serial_driver.c	138;"	d	file:
+GREEN1	led_driver.h	76;"	d
+GREEN2	led_driver.h	79;"	d
+IOPDATA	led_driver.c	91;"	d	file:
+IOPDATA	segment_driver.c	86;"	d	file:
+IOPMOD	led_driver.c	90;"	d	file:
+IOPMOD	segment_driver.c	85;"	d	file:
+LEDBANK	led_driver.c	92;"	d	file:
+LED_1_OFF	led_driver.c	106;"	d	file:
+LED_1_ON	led_driver.c	99;"	d	file:
+LED_2_OFF	led_driver.c	105;"	d	file:
+LED_2_ON	led_driver.c	98;"	d	file:
+LED_3_OFF	led_driver.c	104;"	d	file:
+LED_3_ON	led_driver.c	97;"	d	file:
+LED_4_OFF	led_driver.c	103;"	d	file:
+LED_4_ON	led_driver.c	96;"	d	file:
+OFF	led_driver.h	82;"	d
+OFF	segment_driver.c	118;"	d	file:
+OFF	serial_driver.c	83;"	d	file:
+ON	led_driver.h	81;"	d
+ON	segment_driver.c	117;"	d	file:
+ON	serial_driver.c	82;"	d	file:
+ORANGE	led_driver.h	78;"	d
+PUT_CHAR	serial_driver.c	142;"	d	file:
+RED	led_driver.h	77;"	d
+RX_DATA	serial_driver.c	139;"	d	file:
+SEG_A	segment_driver.c	91;"	d	file:
+SEG_B	segment_driver.c	92;"	d	file:
+SEG_C	segment_driver.c	93;"	d	file:
+SEG_D	segment_driver.c	94;"	d	file:
+SEG_E	segment_driver.c	95;"	d	file:
+SEG_F	segment_driver.c	96;"	d	file:
+SEG_G	segment_driver.c	97;"	d	file:
+SEG_MASK	segment_driver.c	87;"	d	file:
+SYSCFG	led_driver.c	85;"	d	file:
+SYSCFG	segment_driver.c	84;"	d	file:
+SYSCFG	serial_driver.c	85;"	d	file:
+TX_READY	serial_driver.c	141;"	d	file:
+UART0_BASE	serial_driver.c	86;"	d	file:
+UART1_BASE	serial_driver.c	87;"	d	file:
+UBRDIV	serial_driver.c	98;"	d	file:
+UCON	serial_driver.c	94;"	d	file:
+UCRLPB	serial_driver.c	115;"	d	file:
+UCRRxM	serial_driver.c	112;"	d	file:
+UCRRxSI	serial_driver.c	113;"	d	file:
+UCRTxM	serial_driver.c	114;"	d	file:
+ULCON	serial_driver.c	93;"	d	file:
+ULCR8bits	serial_driver.c	104;"	d	file:
+ULCRNoParity	serial_driver.c	106;"	d	file:
+ULCRS1StopBit	serial_driver.c	105;"	d	file:
+URXBUF	serial_driver.c	97;"	d	file:
+USRBreak	serial_driver.c	124;"	d	file:
+USRDTR	serial_driver.c	125;"	d	file:
+USRFraming	serial_driver.c	123;"	d	file:
+USROverrun	serial_driver.c	121;"	d	file:
+USRParity	serial_driver.c	122;"	d	file:
+USRRxData	serial_driver.c	126;"	d	file:
+USRTxEmpty	serial_driver.c	128;"	d	file:
+USRTxHoldEmpty	serial_driver.c	127;"	d	file:
+USTAT	serial_driver.c	95;"	d	file:
+UTXBUF	serial_driver.c	96;"	d	file:
+_DEVICE_DDF_E7T_TYPES	ddf_types.h	70;"	d
+_DEVICE_E7T_LED	led_driver.h	71;"	d
+baudrate	serial_driver.c	/^unsigned int baudrate[2]; \/* baud rate of the serial port ............ *\/$/;"	m	struct:__anon2	file:
+devices	ddf_tree.h	/^device_treestr devices[] = $/;"	v
+diodes	led_driver.c	/^internal_ledstr		diodes;$/;"	v
+display	segment_driver.c	/^internal_segmentstr		display;$/;"	v
+internalSerialE7TSetup	serial_driver.c	/^void internalSerialE7TSetup(unsigned int port, unsigned int baud)$/;"	f
+internal_ledstr	led_driver.c	/^} internal_ledstr;$/;"	t	typeref:struct:__anon1	file:
+internal_segmentstr	segment_driver.c	/^} internal_segmentstr;$/;"	t	typeref:struct:__anon3	file:
+internal_serial_read	serial_driver.c	/^BYTE internal_serial_read(unsigned int port)$/;"	f
+internal_serial_write	serial_driver.c	/^void internal_serial_write(unsigned int port,BYTE c)		$/;"	f
+internal_serialstr	serial_driver.c	/^} internal_serialstr;$/;"	t	typeref:struct:__anon2	file:
+led	led_driver.c	/^unsigned char led[4]; $/;"	m	struct:__anon1	file:
+led_close	led_driver.c	/^int led_close(UID id) $/;"	f
+led_init	led_driver.c	/^void led_init(void) $/;"	f
+led_open	led_driver.c	/^UID led_open(unsigned int major,unsigned int minor) $/;"	f
+led_read_bit	led_driver.c	/^BYTE led_read_bit(UID id) $/;"	f
+led_write_bit	led_driver.c	/^void led_write_bit(UID id,BYTE led_set) $/;"	f
+node	serial_driver.c	/^internal_serialstr		node;$/;"	v
+numeric_display	segment_driver.c	/^static unsigned int numeric_display [16] = $/;"	v	file:
+seg	segment_driver.c	/^	unsigned char seg; $/;"	m	struct:__anon3	file:
+segment_close	segment_driver.c	/^int segment_close(UID id) $/;"	f
+segment_init	segment_driver.c	/^void segment_init (void)$/;"	f
+segment_open	segment_driver.c	/^UID segment_open(unsigned int major,unsigned int ignore) $/;"	f
+segment_read_byte	segment_driver.c	/^BYTE  segment_read_byte(UID id) $/;"	f
+segment_set	segment_driver.c	/^void segment_set(BYTE seg)$/;"	f
+segment_setdisplay	segment_driver.c	/^void segment_setdisplay(unsigned d)$/;"	f
+segment_write_byte	segment_driver.c	/^void segment_write_byte(UID id,BYTE seg) $/;"	f
+serial_close	serial_driver.c	/^int serial_close(UID id) $/;"	f
+serial_init	serial_driver.c	/^void serial_init(void)$/;"	f
+serial_open	serial_driver.c	/^UID serial_open(unsigned int major,unsigned int com) $/;"	f
+serial_read_byte	serial_driver.c	/^BYTE  serial_read_byte(UID id) $/;"	f
+serial_write_byte	serial_driver.c	/^void serial_write_byte(UID id,BYTE data) $/;"	f
+uid	led_driver.c	/^unsigned char uid[4];$/;"	m	struct:__anon1	file:
+uid	segment_driver.c	/^	int 	      uid;$/;"	m	struct:__anon3	file:
+uid	serial_driver.c	/^unsigned int uid[2];      \/* lock[0] = COM1 lock[1] = COM2 ........... *\/$/;"	m	struct:__anon2	file:
